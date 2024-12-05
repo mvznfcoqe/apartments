@@ -1,0 +1,44 @@
+:root {
+  --rs-color-background: 255, 255, 255;
+  --rs-color-overlay: 0, 0, 0, 0.7;
+
+  --rs-color-border: 234, 234, 234;
+
+  --rs-color-text: 58, 58, 58;
+  --rs-color-text--secondary: 134, 134, 134;
+  --rs-font-weight-bold: 700;
+  --rs-font-weight-light: 400;
+
+  --rs-color-white: 255 255 255;
+  --rs-color-primary: 106, 83, 245;
+  --rs-color-success: 0, 187, 109;
+
+  --rs-border: 1px solid rgb(var(--rs-color-border));
+  --rs-border-radius-sm: 10px;
+  --rs-border-radius-md: 12px;
+  --rs-border-radius-lg: 15px;
+
+  --rs-font: "PT Sans", sans-serif;
+
+  --rs-button-light-opacity: 0.2;
+  --rs-button-filled-text-light: 255, 255, 255;
+
+  --rs-star-color-active: 255 169 0;
+  --rs-star-color-inactive: 215 215 215;
+
+  --rs-z-modal: 9;
+  --rs-z-dropdown: 10;
+}
+
+#app {
+  font-family: var(--rs-font);
+  font-weight: var(--rs-font-weight-light);
+  font-size: 16px;
+  color: var(--rs-color-text);
+  background-color: rgb(var(--rs-color-background));
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
