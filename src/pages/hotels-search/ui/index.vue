@@ -29,6 +29,7 @@
     <Content
       v-if="hotelsLoadState === 'success'"
       :hotels="filteredHotels"
+      v-model:page="page"
       @clear-filters="clearFilters"
     />
   </div>
@@ -46,7 +47,7 @@ import Content from "./content.vue";
 import Filters from "./filters/index.vue";
 import { onMounted, ref } from "vue";
 import {
-  filterHotels,
+  getFilteredHotels,
   getDefaultHotelFilters,
   type HotelFilters,
 } from "../model";
@@ -57,6 +58,8 @@ import { queryToString } from "@/shared/lib/query-to-string";
 import { queryToArray } from "@/shared/lib/query-to-array";
 import { useBreakpoints } from "@vueuse/core";
 import { breakpointsConfig } from "@/shared/config/breakpoints";
+import { startPage } from "../config";
+import { usePage } from "../lib/use-page";
 
 const breakpoints = useBreakpoints(breakpointsConfig);
 
@@ -65,8 +68,10 @@ const isMobileFilters = breakpoints.smallerOrEqual("lg");
 const router = useRouter();
 const route = useRoute();
 
+const page = usePage();
+
 const filters = ref<HotelFilters>({
-  maxPrice: [0],
+  maxPrice: [],
   starsCount: [],
   type: [],
   country: null,
@@ -101,39 +106,55 @@ const loadFiltersData = async () => {
     const response = await getHotelsFiltersData();
     filtersData.value = response;
 
-    filtersDataLoadState.value = "success";
+    filters.value.maxPrice = getDefaultHotelFilters({
+      hotelFiltersData: response,
+    }).maxPrice;
 
-    return response;
+    filtersDataLoadState.value = "success";
   } catch {}
 };
 
-const applyFilters = () => {
+const filterHotels = () => {
   if (!hotels.value) {
     return;
   }
 
-  filteredHotels.value = filterHotels({
+  filteredHotels.value = getFilteredHotels({
     filters: filters.value,
     hotels: hotels.value,
   });
-
-  router.push({ query: filters.value });
 };
 
-const clearFilters = () => {
+const saveFiltersToQuery = async () => {
+  await router.replace({
+    query: {
+      ...filters.value,
+      page: startPage,
+      country: filters.value.country || undefined,
+      reviewsCount: filters.value.reviewsCount || undefined,
+    },
+  });
+};
+
+const applyFilters = () => {
+  filterHotels();
+  saveFiltersToQuery();
+};
+
+const clearFilters = async () => {
   if (!filtersData.value) return;
 
   filters.value = getDefaultHotelFilters({
     hotelFiltersData: filtersData.value,
   });
   filteredHotels.value = hotels.value;
-  router.push({ query: undefined });
+  await router.push({ query: { ...route.query, ...filters.value } });
 };
 
 const getQueryFilters = () => {
   const maxPrice = queryToArray(route.query.maxPrice);
 
-  if (maxPrice) {
+  if (maxPrice[0]) {
     filters.value.maxPrice = maxPrice.map((price) => Number(price));
   }
 
@@ -164,23 +185,13 @@ const getQueryFilters = () => {
 
 onMounted(async () => {
   try {
-    const filtersData = await loadFiltersData();
-
-    if (!filtersData) {
-      return;
-    }
-
-    if (!route.query.maxPrice) {
-      filters.value.maxPrice = getDefaultHotelFilters({
-        hotelFiltersData: filtersData,
-      }).maxPrice;
-    }
+    await loadFiltersData();
 
     getQueryFilters();
 
     await loadHotels();
 
-    applyFilters();
+    filterHotels();
   } catch {}
 });
 </script>

@@ -22,7 +22,7 @@ export const getDefaultHotelFilters = ({
   };
 };
 
-export const filterHotels = ({
+export const getFilteredHotels = ({
   hotels,
   filters,
 }: {
@@ -65,10 +65,12 @@ export const filterHotels = ({
       }
     }
 
-    const isMinPriceSuitable = hotel.min_price <= filters.maxPrice[0];
+    if (filters.maxPrice[0]) {
+      const isMinPriceSuitable = hotel.min_price <= filters.maxPrice[0];
 
-    if (!isMinPriceSuitable) {
-      return;
+      if (!isMinPriceSuitable) {
+        return;
+      }
     }
 
     return true;
