@@ -1,29 +1,19 @@
 <template>
   <Filter title="Количество звезд">
-    <ToggleGroupRoot
-      :model-value="modelValue"
-      type="multiple"
-      class="stars-count"
-    >
-      <ToggleGroupItem
+    <div class="stars-count">
+      <Checkbox
         v-for="i in maxStarsCount"
-        :value="i.toString()"
-        as-child
-      >
-        <Checkbox
-          :model-value="isVariantActive({ i: i.toString() })"
-          @update:model-value="toggleVariant({ i: i.toString() })"
-          :label="`${i} ${getPluralForm({ number: i, forms: pluralForms })}`"
-        />
-      </ToggleGroupItem>
-    </ToggleGroupRoot>
+        :model-value="isVariantActive({ i: i.toString() })"
+        @update:model-value="toggleVariant({ i: i.toString() })"
+        :label="`${i} ${getPluralForm({ number: i, forms: pluralForms })}`"
+      />
+    </div>
   </Filter>
 </template>
 
 <script setup lang="ts">
 import type { HotelFilters } from "../../../model";
 import { useVModel } from "@vueuse/core";
-import { ToggleGroupItem, ToggleGroupRoot } from "radix-vue";
 
 import { getPluralForm } from "@/shared/lib/plural-rules/ru";
 import { Checkbox } from "@/shared/ui/checkbox";
