@@ -13,7 +13,7 @@
       </PopoverTrigger>
 
       <PopoverAnchor v-else class="select-trigger" as-child>
-        <BaseInput v-bind="baseInputProps" @wrapper-clicked="openPopover">
+        <BaseInput v-bind="baseInputProps">
           <template #input="{ inputProps }">
             <ComboboxInput as-child>
               <BaseInputField
@@ -24,8 +24,16 @@
             </ComboboxInput>
           </template>
 
-          <template #left-content v-if="withSearch">
+          <template #left-content>
             <MagnifyingGlass />
+          </template>
+
+          <template #right-content>
+            <XMark
+              class="clear-icon"
+              @click="handleClearClicked"
+              v-if="isClearVisible"
+            />
           </template>
         </BaseInput>
       </PopoverAnchor>
@@ -77,6 +85,7 @@ import {
 } from "radix-vue";
 import { computed, ref } from "vue";
 import MagnifyingGlass from "~icons/rs-icons/magnifying-glass";
+import XMark from "~icons/rs-icons/xmark";
 
 import { BaseInput, BaseInputField } from "../base-input";
 import { Checkbox } from "../checkbox";
@@ -152,6 +161,18 @@ const filterFunction = (value: string[], term: string) => {
   });
 };
 
+const isClearVisible = computed(() => {
+  if (Array.isArray(modelValue.value) && modelValue.value.length) {
+    return true;
+  }
+
+  return Boolean(modelValue.value);
+});
+
+const handleClearClicked = () => {
+  modelValue.value = undefined;
+};
+
 const baseInputProps = computed(() => {
   const { modelValue, items, withSearch, ...otherProps } = props;
 
@@ -215,5 +236,10 @@ const openPopover = () => {
   font-weight: var(--rs-font-weight-light);
   color: rgb(var(--rs-color-text--secondary));
   text-align: center;
+}
+
+.clear-icon {
+  width: 15px;
+  height: 15px;
 }
 </style>
