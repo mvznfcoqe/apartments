@@ -85,18 +85,38 @@ export const getQueryFilters = ({
   query,
 }: {
   query: LocationQuery;
-}): HotelFilters => {
+}): Partial<HotelFilters> => {
+  const filters: Partial<HotelFilters> = {};
+
   const maxPrice = queryToArray(query.maxPrice);
+
+  if (query.maxPrice) {
+    filters.maxPrice = maxPrice.map(Number);
+  }
+
   const starsCount = queryToArray(query.starsCount);
+
+  if (query.starsCount) {
+    filters.starsCount = starsCount;
+  }
+
   const type = queryToArray(query.type);
+
+  if (query.type) {
+    filters.type = type;
+  }
+
   const country = queryToString(query.country);
+
+  if (query.country) {
+    filters.country = country;
+  }
+
   const reviewsCount = queryToString(query.reviewsCount);
 
-  return {
-    country: country ?? null,
-    maxPrice: maxPrice.map(Number),
-    reviewsCount: reviewsCount ? Number(reviewsCount) : null,
-    starsCount,
-    type,
-  };
+  if (query.reviewsCount) {
+    filters.reviewsCount = reviewsCount ? Number(reviewsCount) : undefined;
+  }
+
+  return filters;
 };

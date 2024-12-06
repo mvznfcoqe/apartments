@@ -17,18 +17,22 @@ import type { Hotel } from "@/shared/api/hotels";
 import {
   type UseOffsetPaginationReturn,
   useOffsetPagination,
+  useVModel,
 } from "@vueuse/core";
 import { type UnwrapNestedRefs, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import { Pagination } from "@/shared/ui/pagination";
 
 import { cardsMaxCount } from "../../config";
-import { usePage } from "../../lib/use-page";
 import Card from "./card/index.vue";
 
-const props = defineProps<{ hotels: Hotel[] }>();
+const props = defineProps<{ hotels: Hotel[]; page: number }>();
+const emit = defineEmits<{ "update:page": [number] }>();
+const page = useVModel(props, "page", emit);
 
-const page = usePage();
+const router = useRouter();
+const route = useRoute();
 
 const getPageHotels = (
   currentPage: UnwrapNestedRefs<UseOffsetPaginationReturn>["currentPage"],
@@ -41,17 +45,26 @@ const getPageHotels = (
 
 const pageHotels = ref<Hotel[]>(getPageHotels(page.value));
 
-const handlePageChange = (
+const handlePageChange = async (
+  paginationData: UnwrapNestedRefs<UseOffsetPaginationReturn>,
+) => {
+  pageHotels.value = getPageHotels(paginationData.currentPage);
+
+  await router.replace({ query: { ...route.query, page: page.value } });
+};
+
+const handlePageCountChange = (
   paginationData: UnwrapNestedRefs<UseOffsetPaginationReturn>,
 ) => {
   pageHotels.value = getPageHotels(paginationData.currentPage);
 };
 
 useOffsetPagination({
-  total: props.hotels.length,
+  total: () => props.hotels.length,
   page,
   pageSize: cardsMaxCount,
   onPageChange: handlePageChange,
+  onPageCountChange: handlePageCountChange,
 });
 </script>
 

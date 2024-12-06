@@ -13,10 +13,7 @@
       </PopoverTrigger>
 
       <PopoverAnchor v-else class="select-trigger" as-child>
-        <BaseInput
-          v-bind="baseInputProps"
-          @wrapper-clicked="handleWrapperClicked"
-        >
+        <BaseInput v-bind="baseInputProps" @wrapper-clicked="openPopover">
           <template #input="{ inputProps }">
             <ComboboxInput as-child>
               <BaseInputField
@@ -161,12 +158,8 @@ const baseInputProps = computed(() => {
   return otherProps;
 });
 
-const input = ref<InstanceType<typeof BaseInputField>>();
-
-const handleWrapperClicked = () => {
-  if (!input.value) return;
-
-  input.value.focused = true;
+const openPopover = () => {
+  isOpen.value = true;
 };
 </script>
 

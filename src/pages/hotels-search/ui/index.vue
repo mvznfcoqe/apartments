@@ -28,8 +28,8 @@
 
     <Content
       v-if="hotelsLoadState === 'success'"
-      :hotels="filteredHotels"
       v-model:page="page"
+      :hotels="filteredHotels"
       @clear-filters="clearFilters"
     />
   </div>
@@ -48,11 +48,12 @@ import {
   getHotelsFiltersData,
 } from "@/shared/api/hotels";
 import { breakpointsConfig } from "@/shared/config/breakpoints";
+import { objectKeys } from "@/shared/lib/object-keys";
+import { queryToString } from "@/shared/lib/query-to-string";
 import { Button } from "@/shared/ui/button";
 import { Dialog } from "@/shared/ui/dialog";
 
 import { startPage } from "../config";
-import { usePage } from "../lib/use-page";
 import {
   type HotelFilters,
   getDefaultHotelFilters,
@@ -68,7 +69,7 @@ const isMobileFilters = breakpoints.smallerOrEqual("lg");
 const router = useRouter();
 const route = useRoute();
 
-const page = usePage();
+const page = ref(startPage);
 
 const filters = ref<HotelFilters>({
   maxPrice: [],
@@ -137,6 +138,8 @@ const saveFiltersToQuery = async () => {
 };
 
 const applyFilters = () => {
+  page.value = 1;
+
   filterHotels();
   saveFiltersToQuery();
 };
@@ -144,26 +147,48 @@ const applyFilters = () => {
 const clearFilters = async () => {
   if (!filtersData.value) return;
 
-  filters.value = getDefaultHotelFilters({
+  const defaultFilters = getDefaultHotelFilters({
     hotelFiltersData: filtersData.value,
   });
+
+  filters.value = defaultFilters;
   filteredHotels.value = hotels.value;
 
-  await router.push({
-    query: { ...route.query, page: startPage, ...filters.value },
+  await router.replace({
+    query: { page: startPage },
   });
 };
 
 const setFiltersFromQuery = () => {
   const queryFilters = getQueryFilters({ query: route.query });
 
-  filters.value = queryFilters;
+  for (const key of objectKeys(queryFilters)) {
+    if (queryFilters[key] && key in filters.value) {
+      // @ts-ignore
+      filters.value[key] = queryFilters[key];
+    }
+  }
+};
+
+const setPageFromQuery = () => {
+  const queryPage = queryToString(route.query.page)
+    ? Number(queryToString(route.query.page))
+    : undefined;
+
+  if (!queryPage) {
+    return;
+  }
+
+  page.value = queryPage;
 };
 
 onMounted(async () => {
   try {
     await loadFiltersData();
+
     setFiltersFromQuery();
+    setPageFromQuery();
+
     await loadHotels();
   } catch {}
 });

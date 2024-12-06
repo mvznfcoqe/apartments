@@ -16,9 +16,7 @@
     </div>
 
     <div class="filter-actions">
-      <Button @click="handleApplyFiltersClicked" size="lg" type="submit">
-        Применить фильтр
-      </Button>
+      <Button size="lg" type="submit"> Применить фильтры </Button>
 
       <Button
         variant="outlined"
@@ -30,7 +28,7 @@
           <XMark />
         </template>
 
-        Очистить фильтр
+        Очистить фильтры
       </Button>
     </div>
   </form>
@@ -60,10 +58,6 @@ const emit = defineEmits<{
   clearFilters: [];
 }>();
 const filters = useVModel(props, "filters", emit);
-
-const handleApplyFiltersClicked = () => {
-  emit("applyFilters", filters.value);
-};
 
 const handleFormSubmit = () => {
   emit("applyFilters", filters.value);
