@@ -1,11 +1,20 @@
 <template>
-  <TooltipRoot v-bind="forward">
+  <TooltipRoot
+    v-bind="forward"
+    :open="isTouchable || isOpen"
+    @update:open="handleOpenChanged"
+  >
     <TooltipTrigger as-child>
       <slot />
     </TooltipTrigger>
 
     <TooltipPortal>
-      <TooltipContent side="bottom" align="center" class="tooltip-content">
+      <TooltipContent
+        side="bottom"
+        align="center"
+        class="tooltip-content"
+        @pointer-down-outside.stop
+      >
         {{ content }}
 
         <TooltipArrow :width="11" :height="5" class="tooltip-arrow" />
@@ -25,11 +34,26 @@ import {
   TooltipTrigger,
   useForwardPropsEmits,
 } from "radix-vue";
+import { ref } from "vue";
+
+import { useIsTouchable } from "@/shared/lib/is-touchable";
 
 const props = defineProps<TooltipRootProps & { content?: string }>();
 const emits = defineEmits<TooltipRootEmits>();
 
 const forward = useForwardPropsEmits(props, emits);
+
+const { isTouchable } = useIsTouchable();
+
+const isOpen = ref(isTouchable.value);
+
+const handleOpenChanged = (open: boolean) => {
+  if (isTouchable.value) {
+    return;
+  }
+
+  isOpen.value = open;
+};
 </script>
 
 <style lang="scss">
