@@ -8,12 +8,15 @@
       :display-value="displayValue"
       :filter-function="filterFunction"
     >
-      <PopoverTrigger class="select-trigger" as-child v-if="!withSearch">
-        <BaseInput :model-value="inputValue" v-bind="baseInputProps" readonly />
-      </PopoverTrigger>
+      <PopoverTrigger class="select-trigger" as-child>
+        <BaseInput
+          :model-value="inputValue"
+          v-bind="baseInputProps"
+          readonly
+          v-if="!withSearch"
+        />
 
-      <PopoverAnchor v-else class="select-trigger" as-child>
-        <BaseInput v-bind="baseInputProps">
+        <BaseInput v-bind="baseInputProps" v-else>
           <template #input="{ inputProps }">
             <ComboboxInput as-child>
               <BaseInputField
@@ -31,12 +34,12 @@
           <template #right-content>
             <XMark
               class="clear-icon"
-              @click="handleClearClicked"
+              @click.stop="handleClearClicked"
               v-if="isClearVisible"
             />
           </template>
         </BaseInput>
-      </PopoverAnchor>
+      </PopoverTrigger>
 
       <PopoverPortal>
         <PopoverContent side="bottom" align="start" @open-auto-focus.prevent>
@@ -77,7 +80,6 @@ import {
   ComboboxItem,
   ComboboxRoot,
   ComboboxViewport,
-  PopoverAnchor,
   PopoverContent,
   PopoverPortal,
   PopoverRoot,
@@ -178,10 +180,6 @@ const baseInputProps = computed(() => {
 
   return otherProps;
 });
-
-const openPopover = () => {
-  isOpen.value = true;
-};
 </script>
 
 <style lang="scss" scoped>
