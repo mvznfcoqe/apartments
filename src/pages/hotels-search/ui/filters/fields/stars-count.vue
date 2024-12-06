@@ -1,6 +1,10 @@
 <template>
   <Filter title="Количество звезд">
-    <ToggleGroupRoot v-model="modelValue" type="multiple" class="stars-count">
+    <ToggleGroupRoot
+      :model-value="modelValue"
+      type="multiple"
+      class="stars-count"
+    >
       <ToggleGroupItem
         v-for="i in maxStarsCount"
         :value="i.toString()"
