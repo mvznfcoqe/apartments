@@ -18,9 +18,9 @@
 
 <script setup lang="ts">
 import type { Hotel } from "@/shared/api/hotels";
-import { Button } from "@/shared/ui/button";
-
 import Card from "~icons/rs-icons/card";
+
+import { Button } from "@/shared/ui/button";
 
 defineProps<{ hotel: Hotel }>();
 </script>

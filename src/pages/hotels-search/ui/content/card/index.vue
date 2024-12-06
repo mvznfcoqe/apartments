@@ -7,8 +7,9 @@
 
 <script setup lang="ts">
 import type { Hotel } from "@/shared/api/hotels";
-import Header from "./header.vue";
+
 import Footer from "./footer.vue";
+import Header from "./header.vue";
 
 defineProps<{ hotel: Hotel }>();
 </script>

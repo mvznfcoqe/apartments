@@ -21,9 +21,11 @@
 
 <script setup lang="ts">
 import type { Hotel } from "@/shared/api/hotels";
-import { Empty } from "@/shared/ui/empty";
+
 import { Button } from "@/shared/ui/button";
-import { emptyContentText } from "../config";
+import { Empty } from "@/shared/ui/empty";
+
+import { emptyContentText } from "../../config";
 import List from "./list.vue";
 
 defineProps<{ hotels?: Hotel[] }>();

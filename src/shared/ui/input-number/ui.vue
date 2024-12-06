@@ -23,11 +23,12 @@
 </template>
 
 <script setup lang="ts">
-import { NumberFieldInput, NumberFieldRoot } from "radix-vue";
-import { BaseInput, BaseInputField } from "../base-input";
 import type { BaseInputProps } from "../base-input/types";
-import { computed, ref } from "vue";
 import { useVModel } from "@vueuse/core";
+import { NumberFieldInput, NumberFieldRoot } from "radix-vue";
+import { computed, ref } from "vue";
+
+import { BaseInput, BaseInputField } from "../base-input";
 
 const props = defineProps<
   Omit<BaseInputProps, "modelValue"> & { modelValue?: number }

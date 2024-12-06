@@ -36,33 +36,33 @@
 </template>
 
 <script setup lang="ts">
+import { useBreakpoints } from "@vueuse/core";
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
 import {
-  getHotels,
-  getHotelsFiltersData,
   type Hotel,
   type HotelFiltersData,
   type LoadState,
+  getHotels,
+  getHotelsFiltersData,
 } from "@/shared/api/hotels";
-import Content from "./content.vue";
-import Filters from "./filters/index.vue";
-import { onMounted, ref } from "vue";
-import {
-  getFilteredHotels,
-  getDefaultHotelFilters,
-  type HotelFilters,
-} from "../model";
+import { breakpointsConfig } from "@/shared/config/breakpoints";
 import { Button } from "@/shared/ui/button";
 import { Dialog } from "@/shared/ui/dialog";
-import { useRoute, useRouter } from "vue-router";
-import { queryToString } from "@/shared/lib/query-to-string";
-import { queryToArray } from "@/shared/lib/query-to-array";
-import { useBreakpoints } from "@vueuse/core";
-import { breakpointsConfig } from "@/shared/config/breakpoints";
+
 import { startPage } from "../config";
 import { usePage } from "../lib/use-page";
+import {
+  type HotelFilters,
+  getDefaultHotelFilters,
+  getFilteredHotels,
+  getQueryFilters,
+} from "../model";
+import Content from "./content/index.vue";
+import Filters from "./filters/index.vue";
 
 const breakpoints = useBreakpoints(breakpointsConfig);
-
 const isMobileFilters = breakpoints.smallerOrEqual("lg");
 
 const router = useRouter();
@@ -86,6 +86,17 @@ const hotels = ref<Hotel[]>();
 
 const filteredHotels = ref<Hotel[]>();
 
+const filterHotels = () => {
+  if (!hotels.value) {
+    return;
+  }
+
+  filteredHotels.value = getFilteredHotels({
+    filters: filters.value,
+    hotels: hotels.value,
+  });
+};
+
 const loadHotels = async () => {
   try {
     hotelsLoadState.value = "loading";
@@ -93,7 +104,7 @@ const loadHotels = async () => {
     const response = await getHotels();
 
     hotels.value = response.hotels;
-    filteredHotels.value = response.hotels;
+    filterHotels();
 
     hotelsLoadState.value = "success";
   } catch {}
@@ -112,17 +123,6 @@ const loadFiltersData = async () => {
 
     filtersDataLoadState.value = "success";
   } catch {}
-};
-
-const filterHotels = () => {
-  if (!hotels.value) {
-    return;
-  }
-
-  filteredHotels.value = getFilteredHotels({
-    filters: filters.value,
-    hotels: hotels.value,
-  });
 };
 
 const saveFiltersToQuery = async () => {
@@ -148,50 +148,23 @@ const clearFilters = async () => {
     hotelFiltersData: filtersData.value,
   });
   filteredHotels.value = hotels.value;
-  await router.push({ query: { ...route.query, ...filters.value } });
+
+  await router.push({
+    query: { ...route.query, page: startPage, ...filters.value },
+  });
 };
 
-const getQueryFilters = () => {
-  const maxPrice = queryToArray(route.query.maxPrice);
+const setFiltersFromQuery = () => {
+  const queryFilters = getQueryFilters({ query: route.query });
 
-  if (maxPrice[0]) {
-    filters.value.maxPrice = maxPrice.map((price) => Number(price));
-  }
-
-  const starsCount = queryToArray(route.query.starsCount);
-
-  if (starsCount) {
-    filters.value.starsCount = starsCount;
-  }
-
-  const type = queryToArray(route.query.type);
-
-  if (type) {
-    filters.value.type = type;
-  }
-
-  const country = queryToString(route.query.country);
-
-  if (country) {
-    filters.value.country = country;
-  }
-
-  const reviewsCount = queryToString(route.query.reviewsCount);
-
-  if (reviewsCount) {
-    filters.value.reviewsCount = Number(reviewsCount);
-  }
+  filters.value = queryFilters;
 };
 
 onMounted(async () => {
   try {
     await loadFiltersData();
-
-    getQueryFilters();
-
+    setFiltersFromQuery();
     await loadHotels();
-
-    filterHotels();
   } catch {}
 });
 </script>

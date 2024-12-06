@@ -1,3 +1,3 @@
-import Dialog from './ui.vue'
+import Dialog from "./ui.vue";
 
-export { Dialog }
+export { Dialog };

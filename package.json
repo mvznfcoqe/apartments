@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "run-p typecheck \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build",
+    "typecheck": "vue-tsc --build",
     "format": "npx prettier . --write"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^5.0.1",
     "@tsconfig/node22": "^22.0.0",
     "@types/node": "^22.9.3",
     "@vitejs/plugin-vue": "^5.2.1",
@@ -30,6 +31,7 @@
     "@vue/tsconfig": "^0.7.0",
     "npm-run-all2": "^7.0.1",
     "prettier": "3.4.2",
+    "prettier-plugin-svelte": "^3.3.2",
     "typescript": "~5.6.3",
     "unplugin-iconify-generator": "^0.7.3",
     "unplugin-icons": "^0.21.0",

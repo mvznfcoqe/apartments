@@ -1,5 +1,5 @@
 <template>
-  <form class="filters" @submit.prevent="emit('applyFilters', filters)">
+  <form class="filters" @submit.prevent="handleFormSubmit">
     <div class="list">
       <Country v-model="filters.country" :countries="filtersData.countries" />
 
@@ -16,11 +16,7 @@
     </div>
 
     <div class="filter-actions">
-      <Button
-        @click="handleApplyFiltersClicked(filters)"
-        size="lg"
-        type="submit"
-      >
+      <Button @click="handleApplyFiltersClicked" size="lg" type="submit">
         Применить фильтр
       </Button>
 
@@ -41,17 +37,18 @@
 </template>
 
 <script setup lang="ts">
-import { Button } from "@/shared/ui/button";
-import ReviewsAmount from "./reviews-amount.vue";
 import type { HotelFilters } from "../../model";
-import { useVModel } from "@vueuse/core";
-
-import XMark from "~icons/rs-icons/xmark";
 import type { HotelFiltersData } from "@/shared/api/hotels";
-import StarsCount from "./stars-count.vue";
-import Price from "./price.vue";
-import Type from "./type.vue";
-import Country from "./country.vue";
+import { useVModel } from "@vueuse/core";
+import XMark from "~icons/rs-icons/xmark";
+
+import { Button } from "@/shared/ui/button";
+
+import Country from "./fields/country.vue";
+import Price from "./fields/price.vue";
+import ReviewsAmount from "./fields/reviews-amount.vue";
+import StarsCount from "./fields/stars-count.vue";
+import Type from "./fields/type.vue";
 
 const props = defineProps<{
   filters: HotelFilters;
@@ -64,8 +61,12 @@ const emit = defineEmits<{
 }>();
 const filters = useVModel(props, "filters", emit);
 
-const handleApplyFiltersClicked = (filters: HotelFilters) => {
-  emit("applyFilters", filters);
+const handleApplyFiltersClicked = () => {
+  emit("applyFilters", filters.value);
+};
+
+const handleFormSubmit = () => {
+  emit("applyFilters", filters.value);
 };
 
 const handleClearFiltersClicked = () => {

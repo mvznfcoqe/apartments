@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+
 import { HotelsSearchPage } from "./hotels-search";
 
 const routes = [

@@ -10,11 +10,13 @@
 </template>
 
 <script setup lang="ts">
+import type { HotelFilters } from "../../../model";
 import type { HotelFiltersData } from "@/shared/api/hotels";
-import type { HotelFilters } from "../../model";
 import { useVModel } from "@vueuse/core";
+
 import { Select } from "@/shared/ui/select";
-import Filter from "./filter.vue";
+
+import Filter from "../filter.vue";
 
 const props = defineProps<{
   modelValue: HotelFilters["type"];

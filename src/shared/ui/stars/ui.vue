@@ -3,16 +3,21 @@
     <Star
       v-for="i in totalStars"
       class="star"
-      :class="[`star_${i <= modelValue ? 'active' : 'inactive'}`]"
+      :class="[`star_${getIsStarActive({ i }) ? 'active' : 'inactive'}`]"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import Star from "~icons/rs-icons/star";
+
 import { totalStars } from "./config";
 
-defineProps<{ modelValue: number }>();
+const props = defineProps<{ modelValue: number }>();
+
+const getIsStarActive = ({ i }: { i: number }) => {
+  return i <= props.modelValue;
+};
 </script>
 
 <style lang="scss" scoped>

@@ -1,12 +1,11 @@
-import { fileURLToPath, URL } from "node:url";
-
-import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import vueDevTools from "vite-plugin-vue-devtools";
-import Icons from "unplugin-icons/vite";
-import svgLoader from "vite-svg-loader";
+import { URL, fileURLToPath } from "node:url";
 import Iconify from "unplugin-iconify-generator/vite";
 import { FileSystemIconLoader } from "unplugin-icons/loaders";
+import Icons from "unplugin-icons/vite";
+import { defineConfig } from "vite";
+import vueDevTools from "vite-plugin-vue-devtools";
+import svgLoader from "vite-svg-loader";
 
 // https://vite.dev/config/
 export default defineConfig({

@@ -17,12 +17,14 @@
 </template>
 
 <script setup lang="ts">
-import { Checkbox } from "@/shared/ui/checkbox";
-import type { HotelFilters } from "../../model";
+import type { HotelFilters } from "../../../model";
 import { useVModel } from "@vueuse/core";
 import { ToggleGroupItem, ToggleGroupRoot } from "radix-vue";
+
 import { getPluralForm } from "@/shared/lib/plural-rules/ru";
-import Filter from "./filter.vue";
+import { Checkbox } from "@/shared/ui/checkbox";
+
+import Filter from "../filter.vue";
 
 const props = defineProps<{
   modelValue: HotelFilters["starsCount"];

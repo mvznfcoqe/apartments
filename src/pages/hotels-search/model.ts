@@ -1,4 +1,8 @@
 import type { Hotel, HotelFiltersData } from "@/shared/api/hotels";
+import type { LocationQuery } from "vue-router";
+
+import { queryToArray } from "@/shared/lib/query-to-array";
+import { queryToString } from "@/shared/lib/query-to-string";
 
 export type HotelFilters = {
   reviewsCount: number | null;
@@ -75,4 +79,24 @@ export const getFilteredHotels = ({
 
     return true;
   });
+};
+
+export const getQueryFilters = ({
+  query,
+}: {
+  query: LocationQuery;
+}): HotelFilters => {
+  const maxPrice = queryToArray(query.maxPrice);
+  const starsCount = queryToArray(query.starsCount);
+  const type = queryToArray(query.type);
+  const country = queryToString(query.country);
+  const reviewsCount = queryToString(query.reviewsCount);
+
+  return {
+    country: country ?? null,
+    maxPrice: maxPrice.map(Number),
+    reviewsCount: reviewsCount ? Number(reviewsCount) : null,
+    starsCount,
+    type,
+  };
 };

@@ -1,3 +1,3 @@
-import Empty from './ui.vue'
+import Empty from "./ui.vue";
 
-export { Empty }
+export { Empty };

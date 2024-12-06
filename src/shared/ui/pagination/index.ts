@@ -1,3 +1,3 @@
-import Pagination from './ui.vue'
+import Pagination from "./ui.vue";
 
-export { Pagination }
+export { Pagination };

@@ -26,10 +26,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { useVModel } from "@vueuse/core";
-import Input from "./input.vue";
 import type { BaseInputEmit, BaseInputProps } from "../types";
+import { useVModel } from "@vueuse/core";
+import { computed, ref } from "vue";
+
+import Input from "./input.vue";
 
 const props = defineProps<BaseInputProps>();
 const emit = defineEmits<BaseInputEmit>();

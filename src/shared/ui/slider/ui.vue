@@ -12,16 +12,17 @@
 
 <script setup lang="ts">
 import {
-  SliderRoot,
   SliderRange,
+  SliderRoot,
   type SliderRootEmits,
   type SliderRootProps,
   SliderThumb,
   SliderTrack,
   useForwardPropsEmits,
 } from "radix-vue";
-import { Tooltip } from "../tooltip";
 import { computed } from "vue";
+
+import { Tooltip } from "../tooltip";
 
 const props = defineProps<SliderRootProps & { tooltipContent?: string }>();
 const emits = defineEmits<SliderRootEmits>();

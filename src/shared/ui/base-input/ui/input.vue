@@ -9,9 +9,9 @@
 </template>
 
 <script setup lang="ts">
+import type { BaseInputEmit } from "../types";
 import { useFocus, useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
-import type { BaseInputEmit } from "../types";
 
 const props = withDefaults(
   defineProps<{

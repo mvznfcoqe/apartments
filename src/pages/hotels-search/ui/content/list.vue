@@ -14,15 +14,17 @@
 
 <script setup lang="ts">
 import type { Hotel } from "@/shared/api/hotels";
-import Card from "./card/index.vue";
 import {
-  useOffsetPagination,
   type UseOffsetPaginationReturn,
+  useOffsetPagination,
 } from "@vueuse/core";
-import { cardsMaxCount } from "../config";
-import { ref, type UnwrapNestedRefs } from "vue";
+import { type UnwrapNestedRefs, ref } from "vue";
+
 import { Pagination } from "@/shared/ui/pagination";
-import { usePage } from "../lib/use-page";
+
+import { cardsMaxCount } from "../../config";
+import { usePage } from "../../lib/use-page";
+import Card from "./card/index.vue";
 
 const props = defineProps<{ hotels: Hotel[] }>();
 

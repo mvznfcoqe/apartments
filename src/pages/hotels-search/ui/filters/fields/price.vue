@@ -10,12 +10,14 @@
 </template>
 
 <script setup lang="ts">
-import { useVModel } from "@vueuse/core";
-import type { HotelFilters } from "../../model";
-import Filter from "./filter.vue";
-import { Slider } from "@/shared/ui/slider";
+import type { HotelFilters } from "../../../model";
 import type { HotelFiltersData } from "@/shared/api/hotels";
+import { useVModel } from "@vueuse/core";
 import { computed } from "vue";
+
+import { Slider } from "@/shared/ui/slider";
+
+import Filter from "../filter.vue";
 
 const props = defineProps<{
   modelValue: HotelFilters["maxPrice"];

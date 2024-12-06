@@ -5,26 +5,8 @@
       v-model="modelValue"
       :multiple="multiple"
       v-model:search-term="searchTerm"
-      :display-value="
-        (val) => {
-          if (Array.isArray(modelValue)) {
-            return val;
-          }
-
-          return inputValue || val;
-        }
-      "
-      :filter-function="
-        (val, term) => {
-          return val.filter((value) => {
-            const item = items.find((item) => item.value === value);
-
-            if (!item) return false;
-
-            return item.title.toLowerCase().includes(term.toLowerCase());
-          });
-        }
-      "
+      :display-value="displayValue"
+      :filter-function="filterFunction"
     >
       <PopoverTrigger class="select-trigger" as-child v-if="!withSearch">
         <BaseInput :model-value="inputValue" v-bind="baseInputProps" readonly />
@@ -80,6 +62,9 @@
 </template>
 
 <script setup lang="ts">
+import type { BaseInputProps } from "../base-input/types";
+import type { SelectItem } from "./types";
+import { useVModel } from "@vueuse/core";
 import {
   ComboboxContent,
   ComboboxEmpty,
@@ -93,13 +78,11 @@ import {
   PopoverRoot,
   PopoverTrigger,
 } from "radix-vue";
-import { BaseInput, BaseInputField } from "../base-input";
-import MagnifyingGlass from "~icons/rs-icons/magnifying-glass";
-import { useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
-import type { BaseInputProps } from "../base-input/types";
+import MagnifyingGlass from "~icons/rs-icons/magnifying-glass";
+
+import { BaseInput, BaseInputField } from "../base-input";
 import { Checkbox } from "../checkbox";
-import type { SelectItem } from "./types";
 import { emptyText } from "./config";
 
 const props = defineProps<
@@ -142,12 +125,6 @@ const inputValue = computed(() => {
     .join(", ");
 });
 
-const baseInputProps = computed(() => {
-  const { modelValue, items, withSearch, ...otherProps } = props;
-
-  return otherProps;
-});
-
 const getIsItemActive = ({ value }: { value: string }) => {
   if (!modelValue.value) return false;
 
@@ -159,6 +136,30 @@ const handleSearchTermChanged = (term: string) => {
     isOpen.value = true;
   }
 };
+
+const displayValue = (value: string) => {
+  if (Array.isArray(modelValue)) {
+    return value;
+  }
+
+  return inputValue.value || value;
+};
+
+const filterFunction = (value: string[], term: string) => {
+  return value.filter((value) => {
+    const item = props.items.find((item) => item.value === value);
+
+    if (!item) return false;
+
+    return item.title.toLowerCase().includes(term.toLowerCase());
+  });
+};
+
+const baseInputProps = computed(() => {
+  const { modelValue, items, withSearch, ...otherProps } = props;
+
+  return otherProps;
+});
 
 const input = ref<InstanceType<typeof BaseInputField>>();
 

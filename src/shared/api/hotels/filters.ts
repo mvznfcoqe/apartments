@@ -1,5 +1,6 @@
 import type { SelectItem } from "@/shared/ui/select";
-import { getHotels, type Hotel } from "./hotels";
+
+import { type Hotel, getHotels } from "./hotels";
 
 export type HotelFiltersData = {
   starsCount: number;

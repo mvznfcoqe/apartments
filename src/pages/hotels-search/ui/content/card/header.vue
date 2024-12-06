@@ -40,11 +40,11 @@
 
 <script setup lang="ts">
 import type { Hotel } from "@/shared/api/hotels";
+import { computed } from "vue";
+import Pin from "~icons/rs-icons/pin";
+
 import { getPluralForm } from "@/shared/lib/plural-rules/ru";
 import { Stars } from "@/shared/ui/stars";
-import { computed } from "vue";
-
-import Pin from "~icons/rs-icons/pin";
 
 const props = defineProps<{ hotel: Hotel }>();
 

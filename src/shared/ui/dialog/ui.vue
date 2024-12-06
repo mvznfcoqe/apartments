@@ -32,7 +32,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "radix-vue";
-
 import XMark from "~icons/rs-icons/xmark";
 
 defineProps<{ title: string }>();

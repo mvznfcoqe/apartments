@@ -1,6 +1,8 @@
-import { queryToString } from "@/shared/lib/query-to-string";
 import { computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+import { queryToString } from "@/shared/lib/query-to-string";
+
 import { startPage } from "../config";
 
 export const usePage = () => {
