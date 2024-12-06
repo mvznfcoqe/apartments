@@ -80,7 +80,9 @@ const handleClearFiltersClicked = () => {
   flex-direction: column;
   gap: 25px;
 
-  width: 325px;
+  @media (min-width: $rs-breakpoint-lg) {
+    width: 325px;
+  }
 }
 
 .filter-actions {

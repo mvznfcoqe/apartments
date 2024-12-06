@@ -48,6 +48,8 @@ defineProps<{ title: string }>();
   overflow-y: auto;
 
   inset: 0;
+
+  padding: 20px;
 }
 
 .dialog-content {
@@ -60,8 +62,6 @@ defineProps<{ title: string }>();
   width: 100%;
   max-width: 450px;
   padding: 25px;
-
-  margin: 20px 0;
 
   position: relative;
 

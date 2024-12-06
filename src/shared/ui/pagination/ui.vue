@@ -109,11 +109,19 @@ const page = useVModel(props, "page", emit);
   }
 
   &_prev {
-    margin-right: 44px;
+    margin-right: 10px;
+
+    @media (min-width: $rs-breakpoint-lg) {
+      margin-right: 44px;
+    }
   }
 
   &_next {
-    margin-left: 44px;
+    margin-left: 10px;
+
+    @media (min-width: $rs-breakpoint-lg) {
+      margin-left: 44px;
+    }
   }
 
   & span {
