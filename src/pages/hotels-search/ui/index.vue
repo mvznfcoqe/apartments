@@ -162,10 +162,11 @@ const clearFilters = async () => {
 const setFiltersFromQuery = () => {
   const queryFilters = getQueryFilters({ query: route.query });
 
+  console.log(queryFilters);
+
   for (const key of objectKeys(queryFilters)) {
     if (queryFilters[key] && key in filters.value) {
-      // @ts-ignore
-      filters.value[key] = queryFilters[key];
+      filters.value[key] = queryFilters[key] as never;
     }
   }
 };

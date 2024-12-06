@@ -19,7 +19,7 @@ import {
   useOffsetPagination,
   useVModel,
 } from "@vueuse/core";
-import { type UnwrapNestedRefs, ref } from "vue";
+import { type UnwrapNestedRefs, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { Pagination } from "@/shared/ui/pagination";
@@ -53,19 +53,19 @@ const handlePageChange = async (
   await router.replace({ query: { ...route.query, page: page.value } });
 };
 
-const handlePageCountChange = (
-  paginationData: UnwrapNestedRefs<UseOffsetPaginationReturn>,
-) => {
-  pageHotels.value = getPageHotels(paginationData.currentPage);
-};
-
-useOffsetPagination({
+const { currentPage } = useOffsetPagination({
   total: () => props.hotels.length,
   page,
   pageSize: cardsMaxCount,
   onPageChange: handlePageChange,
-  onPageCountChange: handlePageCountChange,
 });
+
+watch(
+  () => props.hotels.length,
+  () => {
+    pageHotels.value = getPageHotels(currentPage.value);
+  },
+);
 </script>
 
 <style lang="scss" scoped>

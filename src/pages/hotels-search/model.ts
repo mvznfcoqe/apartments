@@ -38,7 +38,7 @@ export const getFilteredHotels = ({
       const isCountrySuitable = hotel.country === filters.country;
 
       if (!isCountrySuitable) {
-        return;
+        return false;
       }
     }
 
@@ -46,7 +46,7 @@ export const getFilteredHotels = ({
       const isTypeSuitable = filters.type.includes(hotel.type);
 
       if (!isTypeSuitable) {
-        return;
+        return false;
       }
     }
 
@@ -56,7 +56,7 @@ export const getFilteredHotels = ({
       );
 
       if (!isStarsCountSuitable) {
-        return;
+        return false;
       }
     }
 
@@ -65,7 +65,7 @@ export const getFilteredHotels = ({
         hotel.reviews_amount >= filters.reviewsCount;
 
       if (!isReviewsCountSuitable) {
-        return;
+        return false;
       }
     }
 
@@ -73,7 +73,7 @@ export const getFilteredHotels = ({
       const isMinPriceSuitable = hotel.min_price <= filters.maxPrice[0];
 
       if (!isMinPriceSuitable) {
-        return;
+        return false;
       }
     }
 
