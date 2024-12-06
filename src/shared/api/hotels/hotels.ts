@@ -21,7 +21,7 @@ type Response = {
 };
 
 export const getHotels = async () => {
-  const hotels = await ofetch<Response>("/hotels.json");
+  const hotels = await ofetch<Response>("./hotels.json");
 
   return hotels;
 };
